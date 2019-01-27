@@ -27,9 +27,17 @@ func (p *ParkingLot) Init(numSlots int) int {
 	return len(p.Slots)
 }
 
-//func (p *ParkingLot) Park(regnNumber, color string) (int, error) {
-//
-//}
+func (p *ParkingLot) Park(regnNumber, color string) (int, error) {
+	if len(p.Slots) == 0 {
+		return -1, UnableToPark
+	}
+
+	if p.IsFull {
+		return -1, ParkingLotFull
+	}
+
+
+}
 
 //func (p *ParkingLot) Leave(slotNum int) (int, error) {
 //
