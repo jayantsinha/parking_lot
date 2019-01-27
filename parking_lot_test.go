@@ -49,20 +49,20 @@ func TestParkingLot_Park(t *testing.T) {
 			p := new(ParkingLot)
 			_, err := p.Park(tt.RegnNumber, tt.Color)
 			if (err == nil) || err != UnableToPark {
-				t.Errorf("ParkingLot.Park() expected error = %v, but got %v", UnableToPark, err)
+				t.Errorf("ParkingLot.Park() expected error = %v, but got: %v", UnableToPark, err)
 				return
 			}
 		})
 	}
 
 	// Test parking after init
+	p := new(ParkingLot)
+	p.Init(10)
 	for _, tt := range tests {
 		t.Run("VehicleParkingTest", func(t *testing.T) {
-			p := new(ParkingLot)
-			p.Init(10)
 			got, err := p.Park(tt.RegnNumber, tt.Color)
 			if (err != nil) {
-				t.Errorf("ParkingLot.Park() expected error = %v, but got %v", nil, err)
+				t.Errorf("ParkingLot.Park() expected error = %v, but got: %v", nil, err)
 				return
 			}
 			if got != tt.wantedSlotNum {
@@ -72,23 +72,23 @@ func TestParkingLot_Park(t *testing.T) {
 	}
 
 	// Test parking on full parking lot
+	p = new(ParkingLot)
+	p.Init(1)
 	for idx, tt := range tests {
 		t.Run("VehicleParkingTest", func(t *testing.T) {
-			p := new(ParkingLot)
-			p.Init(1)
 			got, err := p.Park(tt.RegnNumber, tt.Color)
-			if idx == 2 {
-				if (err != nil) {
-					t.Errorf("ParkingLot.Park() expected error = %v, but got %v", ParkingLotFull, err)
+			if idx >= 1 {
+				if (err == nil) {
+					t.Errorf("ParkingLot.Park() expected error = %v, but got: %v", ParkingLotFull, err)
 					return
 				}
 			} else {
 				if (err != nil) {
-					t.Errorf("ParkingLot.Park() expected error = %v, but got %v", nil, err)
+					t.Errorf("ParkingLot.Park() expected error = %v, but got: %v", nil, err)
 					return
 				}
 				if got != tt.wantedSlotNum {
-					t.Errorf("ParkingLot.Park() expected slot number to be %v, but got %v", tt.wantedSlotNum, got)
+					t.Errorf("ParkingLot.Park() expected slot number to be %v, but got: %v", tt.wantedSlotNum, got)
 				}
 			}
 		})

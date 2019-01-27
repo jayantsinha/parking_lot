@@ -49,13 +49,13 @@ func (p *ParkingLot) Park(regnNumber, color string) (int, error) {
 
 	emptySlots.Remove(slotToFill)
 	p.Slots = append(p.Slots, &Slot{Vhcl: &Vehicle{RegnNumber:regnNumber, Color:color}, Num: slotToFill})
-	return slotToFill, nil
+	return slotToFill+1, nil
 }
 
 //func (p *ParkingLot) Leave(slotNum int) (int, error) {
 //
 //}
-//
+
 //func (p *ParkingLot) Status() []*Slot {
 //
 //}
