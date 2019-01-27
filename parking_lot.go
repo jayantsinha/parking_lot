@@ -52,9 +52,9 @@ func (p *ParkingLot) Park(regnNumber, color string) (int, error) {
 	return slotToFill+1, nil
 }
 
-//func (p *ParkingLot) Leave(slotNum int) (int, error) {
-//
-//}
+func (p *ParkingLot) Leave(slotNum int) (int, error) {
+	return -1, nil
+}
 
 //func (p *ParkingLot) Status() []*Slot {
 //
