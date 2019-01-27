@@ -19,7 +19,7 @@ var emptySlots *EmptySlots
 
 func (p *ParkingLot) Init(numSlots int) int {
 	emptySlots = NewEmptySlots()
-	p.Slots = make([]*Slot, numSlots)
+	p.Slots = make([]*Slot, numSlots, numSlots)
 	for i := 0; i < numSlots; i++ {
 		p.Slots[i] = &Slot{
 			Num:  i,
@@ -40,9 +40,16 @@ func (p *ParkingLot) Park(regnNumber, color string) (int, error) {
 	if p.IsFull {
 		return -1, ParkingLotFull
 	}
-	emptySlots.Remove(0)
-	p.Slots = append(p.Slots, &Slot{Vhcl: &Vehicle{RegnNumber:regnNumber, Color:color}, Num: 1})
-	return -1, nil
+
+	slotToFill := emptySlots.GetMin()
+	if slotToFill == -1 {
+		p.IsFull = true
+		return -1, ParkingLotFull
+	}
+
+	emptySlots.Remove(slotToFill)
+	p.Slots = append(p.Slots, &Slot{Vhcl: &Vehicle{RegnNumber:regnNumber, Color:color}, Num: slotToFill})
+	return slotToFill, nil
 }
 
 //func (p *ParkingLot) Leave(slotNum int) (int, error) {

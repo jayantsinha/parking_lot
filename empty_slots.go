@@ -1,5 +1,7 @@
 package main
 
+import "math"
+
 type EmptySlots struct {
 	set map[int]bool
 }
@@ -25,4 +27,17 @@ func (set *EmptySlots) Remove(i int) {
 
 func (set *EmptySlots) Size() int {
 	return len(set.set)
+}
+
+func (set *EmptySlots) GetMin() int {
+	if len(set.set) == 0 {
+		return -1
+	}
+	min := math.MaxInt32
+	for k, _ := range set.set {
+		if k < min {
+			min = k
+		}
+	}
+	return min
 }

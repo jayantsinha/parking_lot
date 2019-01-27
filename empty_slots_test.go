@@ -85,9 +85,30 @@ func TestEmptySlots_Size(t *testing.T) {
 	set := *NewEmptySlots()
 	for _, tt := range tests {
 		t.Run("EmptySlots.Size()", func(t *testing.T) {
-				set.set[tt.n] = true
+			set.set[tt.n] = true
 			if got := set.Size(); got != tt.want {
 				t.Errorf("EmptySlots.Size() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestEmptySlots_GetMin(t *testing.T) {
+	tests := []struct {
+		n    int
+		want int
+	}{
+		{11, 11},
+		{2, 2},
+		{13, 2},
+		{1, 1},
+	}
+	set := *NewEmptySlots()
+	for _, tt := range tests {
+		t.Run("EmptySlots.GetMin()", func(t *testing.T) {
+			set.set[tt.n] = true
+			if got := set.GetMin(); got != tt.want {
+				t.Errorf("EmptySlots.GetMin(): got %v, want %v", got, tt.want)
 			}
 		})
 	}
