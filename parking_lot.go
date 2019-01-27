@@ -15,28 +15,34 @@ type ParkingLot struct {
 	IsFull bool
 }
 
+var emptySlots *EmptySlots
+
 func (p *ParkingLot) Init(numSlots int) int {
+	emptySlots = NewEmptySlots()
 	p.Slots = make([]*Slot, numSlots)
 	for i := 0; i < numSlots; i++ {
 		p.Slots[i] = &Slot{
 			Num:  i,
 			Vhcl: nil,
 		}
+		emptySlots.Add(i)
 	}
 	p.IsFull = false
+
 	return len(p.Slots)
 }
 
 func (p *ParkingLot) Park(regnNumber, color string) (int, error) {
-	if len(p.Slots) == 0 {
+	if p.Slots == nil {
 		return -1, UnableToPark
 	}
 
 	if p.IsFull {
 		return -1, ParkingLotFull
 	}
-
-
+	emptySlots.Remove(0)
+	p.Slots = append(p.Slots, &Slot{Vhcl: &Vehicle{RegnNumber:regnNumber, Color:color}, Num: 1})
+	return -1, nil
 }
 
 //func (p *ParkingLot) Leave(slotNum int) (int, error) {
