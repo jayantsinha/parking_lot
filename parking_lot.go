@@ -21,8 +21,11 @@ type ParkingLot struct {
 
 var emptySlots *EmptySlots
 
-func (p *ParkingLot) Init(numSlots int) int {
+func (p *ParkingLot) Init(numSlots int) (int, error) {
 	emptySlots = NewEmptySlots()
+	if numSlots < 1 {
+		return -1, ParkingLotNotCreated
+	}
 	p.Slots = make([]*Slot, numSlots, numSlots)
 	for i := 0; i < numSlots; i++ {
 		p.Slots[i] = &Slot{
@@ -33,7 +36,7 @@ func (p *ParkingLot) Init(numSlots int) int {
 	}
 	p.IsFull = false
 
-	return len(p.Slots)
+	return len(p.Slots), nil
 }
 
 func (p *ParkingLot) Park(regnNumber, color string) (int, error) {

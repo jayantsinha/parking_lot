@@ -11,18 +11,21 @@ func TestParkingLot_Init(t *testing.T) {
 		want int
 	}
 	tests := []ParkingInitTest{
-		{0, 0},
+		{0, -1},
 		{1, 1},
 		{3, 3},
 		{10000, 10000},
+		{0, -1},
+		{-2, -1},
 	}
 	for _, tt := range tests {
 		t.Run("ParkingInitTest", func(t *testing.T) {
 			p := new(ParkingLot)
-			if got := p.Init(tt.n); got != tt.want {
+			if got, _ := p.Init(tt.n); got != tt.want {
 				t.Errorf("ParkingLot.Init() = %v, want %v", got, tt.want)
 			}
-			if got := p.Init(tt.n); got != tt.want {
+
+			if got, _ := p.Init(tt.n); got != tt.want {
 				t.Errorf("ParkingLot.Init() = %v, want %v", got, tt.want)
 			}
 		})
