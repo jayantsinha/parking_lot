@@ -90,7 +90,7 @@ func (p *ParkingLot) FindSlotNumbersByColor(color string) ([]int, error) {
 	slots := make([]int, 0)
 	correctedColor := strings.TrimSpace(strings.ToLower(color))
 	for _, v := range p.Slots {
-		if strings.ToLower(v.Vhcl.Color) == correctedColor {
+		if v.Vhcl != nil && strings.ToLower(v.Vhcl.Color) == correctedColor {
 			slots = append(slots, v.Num+1)
 		}
 	}
@@ -111,7 +111,7 @@ func (p *ParkingLot) FindRegistrationNumbersByColor(color string) ([]string, err
 	rnums := make([]string, 0)
 	correctedColor := strings.TrimSpace(strings.ToLower(color))
 	for _, v := range p.Slots {
-		if strings.ToLower(v.Vhcl.Color) == correctedColor {
+		if v.Vhcl != nil && strings.ToLower(v.Vhcl.Color) == correctedColor {
 			rnums = append(rnums, v.Vhcl.RegnNumber)
 		}
 	}
