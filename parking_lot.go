@@ -69,10 +69,10 @@ func (p *ParkingLot) Leave(slotNum int) (int, error) {
 	return slotNum, nil
 }
 
-//func (p *ParkingLot) Status() []*Slot {
-//
-//}
-//
+func (p *ParkingLot) Status() []*Slot {
+	return p.Slots
+}
+
 //func (p *ParkingLot) FindSlotNumbersByColor(color string) ([]int, error) {
 //
 //}
