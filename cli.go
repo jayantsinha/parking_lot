@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -24,6 +25,10 @@ func CallRespFunc(args []string, f func(args []string) bool) bool {
 func CreateParkingLot(args []string) (ret bool) {
 	if len(args) != 2 {
 		fmt.Println("Invalid syntax. Use 'create_parking_lot <num_slots>'")
+		return
+	}
+	if isParkingLotCreated {
+		fmt.Println("Parking lot already created; cannot recreate")
 		return
 	}
 	p = new(ParkingLot)
@@ -49,6 +54,7 @@ func ParkVehicle(args []string) (ret bool) {
 		fmt.Println("Create a parking lot first using 'create_parking_lot <num_slots>'")
 		return
 	}
+
 	// check for valid number of arguments
 	if len(args) != 3 {
 		fmt.Println(InvalidNumOfArgument)
@@ -71,6 +77,12 @@ func LeaveSlot(args []string) (ret bool) {
 		fmt.Println(InvalidNumOfArgument)
 		return
 	}
+
+	if !isParkingLotCreated {
+		fmt.Println("Create a parking lot first using 'create_parking_lot <num_slots>'")
+		return
+	}
+
 	slot, err := strToInt(args[1])
 	if err != nil {
 		fmt.Println(InvalidValuePassed)
@@ -91,6 +103,11 @@ func GetStatus(args []string) (ret bool) {
 	// check for valid number of arguments
 	if len(args) != 1 {
 		fmt.Println(InvalidNumOfArgument)
+		return
+	}
+
+	if !isParkingLotCreated {
+		fmt.Println("Create a parking lot first using 'create_parking_lot <num_slots>'")
 		return
 	}
 
@@ -121,6 +138,11 @@ func GetRegNumsByColor(args []string) (ret bool) {
 		return
 	}
 
+	if !isParkingLotCreated {
+		fmt.Println("Create a parking lot first using 'create_parking_lot <num_slots>'")
+		return
+	}
+
 	rnums, err := p.FindRegistrationNumbersByColor(args[1])
 	if err != nil {
 		fmt.Println(err)
@@ -136,6 +158,11 @@ func GetSlotNumByRegNum(args []string) (ret bool) {
 	// check for valid number of arguments
 	if len(args) != 2 {
 		fmt.Println(InvalidNumOfArgument)
+		return
+	}
+
+	if !isParkingLotCreated {
+		fmt.Println("Create a parking lot first using 'create_parking_lot <num_slots>'")
 		return
 	}
 
@@ -157,6 +184,11 @@ func GetSlotsByColor(args []string) (ret bool) {
 		return
 	}
 
+	if !isParkingLotCreated {
+		fmt.Println("Create a parking lot first using 'create_parking_lot <num_slots>'")
+		return
+	}
+
 	slots, err := p.FindSlotNumbersByColor(args[1])
 	if err != nil {
 		fmt.Println(err)
@@ -169,13 +201,13 @@ func GetSlotsByColor(args []string) (ret bool) {
 
 // EndSession is the handler for exit command
 func EndSession(args []string) (ret bool) {
-	fmt.Println(8)
-	return
+	os.Exit(1)
+	return true // just to satisfy the behaviour
 }
 
 func ShowVersion(args []string) (ret bool) {
 	fmt.Println("Parking Lot version", Version)
-	return
+	return true
 }
 
 func strToInt(val string) (int, error) {
