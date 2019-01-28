@@ -8,4 +8,5 @@ var (
 	ParkingLotFull                  = errors.New("Parking lot is full. Unable to park.")
 	UnableToVacateEmptySlot         = errors.New("Slot already empty; unable to vacate.")
 	UnableToVacateOnNonExistentSlot = errors.New("Slot not found; unable to vacate.")
+	NotFound                        = errors.New("Not Found")
 )
