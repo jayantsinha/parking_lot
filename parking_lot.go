@@ -97,10 +97,22 @@ func (p *ParkingLot) FindSlotNumbersByColor(color string) ([]int, error) {
 	return slots, nil
 }
 
-//func (p *ParkingLot) FindRegistrationNumbersByColor(color string) ([]string, error) {
-//
-//}
-//
+func (p *ParkingLot) FindRegistrationNumbersByColor(color string) ([]string, error) {
+	rnums := make([]string, 0)
+	correctedColor := strings.TrimSpace(strings.ToLower(color))
+	for _, v := range p.Slots {
+		if strings.ToLower(v.Vhcl.Color) == correctedColor {
+			rnums = append(rnums, v.Vhcl.RegnNumber)
+		}
+	}
+
+	if len(rnums) == 0 {
+		return []string{}, NotFound
+	}
+
+	return rnums, nil
+}
+
 //func (p *ParkingLot) FindSlotByRegistrationNumber(regnNumber string) (int, error) {
 //
 //}
