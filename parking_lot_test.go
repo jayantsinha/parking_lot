@@ -37,11 +37,19 @@ func TestParkingLot_Park(t *testing.T) {
 	type VehicleParkingTest struct {
 		Vehicle
 		wantedSlotNum int
+		wantErr bool
 	}
 	tests := []VehicleParkingTest{
-		{Vehicle{RegnNumber: "KA-01MJ-4190", Color: "Red"}, 1},
-		{Vehicle{RegnNumber: "BR1D-5621", Color: "Grey"}, 2},
-		{Vehicle{RegnNumber: "BRL-106", Color: "Black"}, 3},
+		{Vehicle{RegnNumber: "KA-01MJ-4190", Color: "Red"}, 1, false},
+		{Vehicle{RegnNumber: "BR1D-5621", Color: "Grey"}, 2, false},
+		{Vehicle{RegnNumber: "BRL-106", Color: "Black"}, 3, false},
+		{Vehicle{RegnNumber: "", Color: "Black"}, -1, true},
+		{Vehicle{RegnNumber: "", Color: ""}, -1, true},
+		{Vehicle{RegnNumber: "Some number", Color: ""}, -1, true},
+		{Vehicle{RegnNumber: "!@#$%^765876uykh", Color: ""}, -1, true},
+		{Vehicle{RegnNumber: "ABCD", Color: "White#$^"}, -1, true},
+		{Vehicle{RegnNumber: "BRL-106", Color: "White"}, -1, true},
+		{Vehicle{RegnNumber: "BRL-106", Color: "Black"}, -1, true},
 	}
 
 	// Test parking without init
@@ -62,12 +70,19 @@ func TestParkingLot_Park(t *testing.T) {
 	for _, tt := range tests {
 		t.Run("VehicleParkingTest", func(t *testing.T) {
 			got, err := p.Park(tt.RegnNumber, tt.Color)
-			if err != nil {
-				t.Errorf("ParkingLot.Park() expected error = %v, but got: %v", nil, err)
-				return
-			}
-			if got != tt.wantedSlotNum {
-				t.Errorf("ParkingLot.Park() expected slot number to be %v, but got %v", tt.wantedSlotNum, got)
+			if tt.wantErr && (tt.RegnNumber == "" || tt.Color == "") {
+				if err == nil {
+					t.Errorf("ParkingLot.Park() got error: %v, want %v", err, InvalidInput)
+					return
+				}
+			} else {
+				if err != nil {
+					t.Errorf("ParkingLot.Park() expected error = %v, but got: %v", nil, err)
+					return
+				}
+				if got != tt.wantedSlotNum {
+					t.Errorf("ParkingLot.Park() expected slot number to be %v, but got %v", tt.wantedSlotNum, got)
+				}
 			}
 		})
 	}
