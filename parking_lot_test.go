@@ -97,21 +97,21 @@ func TestParkingLot_Park(t *testing.T) {
 
 func TestParkingLot_Leave(t *testing.T) {
 	slotTests := []struct {
-		slotNum int
+		slotNum     int
 		vacatedSlot int
-	} {
-		{1,1},
-		{2,2},
-		{2,-1},
-		{3,-1},
-		{-3,-1},
+	}{
+		{1, 1},
+		{2, 2},
+		{2, -1},
+		{3, -1},
+		{-3, -1},
 	}
 	p = new(ParkingLot)
 	p.Init(2)
 	_, _ = p.Park("2122", "Red")
 	_, _ = p.Park("1111", "Purple")
 	for idx, tt := range slotTests {
-		t.Run("ParkingLot.Leave()", func(t *testing.T) {
+		t.Run("ParkingLotLeaveTest", func(t *testing.T) {
 			got, err := p.Leave(tt.slotNum)
 			if idx == 2 {
 				if err == nil {
@@ -133,5 +133,21 @@ func TestParkingLot_Leave(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestParkingLot_Status(t *testing.T) {
+	p = new(ParkingLot)
+	// Check on empty parking lot
+	got := len(p.Status())
+	if got != 0 {
+		t.Errorf("ParkingLot.Status(): got length of Status() = %d; expected %d", got, 0)
+	}
+	p.Init(2)
+	_, _ = p.Park("2122", "Red")
+	_, _ = p.Park("1111", "Purple")
+	got = len(p.Status())
+	if got != 2 {
+		t.Errorf("ParkingLot.Status(): got length of Status() = %d; expected %d", got, 2)
 	}
 }
