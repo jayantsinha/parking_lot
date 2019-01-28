@@ -194,3 +194,45 @@ func TestParkingLot_FindSlotNumbersByColor(t *testing.T) {
 		})
 	}
 }
+
+func TestParkingLot_FindRegistrationNumbersByColor(t *testing.T) {
+	p = new(ParkingLot)
+	p.Init(6)
+	_, _ = p.Park("1111", "Red")
+	_, _ = p.Park("2222", "Purple")
+	_, _ = p.Park("3333", "White")
+	_, _ = p.Park("4444", "White")
+	_, _ = p.Park("5555", "Blue")
+	_, _ = p.Park("6666", "White")
+	tests := []struct {
+		color   string
+		want    []string
+		wantErr bool
+	}{
+		{"Red", []string{"1111"}, false},
+		{"Purple", []string{"2222"}, false},
+		{"White", []string{"3333", "4444", "6666"}, false},
+		{"Blue ", []string{"5555"}, false},
+		{"BLUE", []string{"5555"}, false},
+		{"Yellow", []string{}, true},
+	}
+	for idx, tt := range tests {
+		t.Run("ParkingLotFindRegistrationNumbersByColorTest", func(t *testing.T) {
+			got, err := p.FindRegistrationNumbersByColor(tt.color)
+			if idx >= 5 {
+				if err == nil {
+					t.Errorf("ParkingLot.FindRegistrationNumbersByColor() got error = %v, but wanted error = %v", err, NotFound)
+					return
+				}
+			} else {
+				if (err != nil) != tt.wantErr {
+					t.Errorf("ParkingLot.FindRegistrationNumbersByColor() got error = %v, but wanted error = %v", err, tt.wantErr)
+					return
+				}
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("ParkingLot.FindRegistrationNumbersByColor() = %v, want %v", got, tt.want)
+				}
+			}
+		})
+	}
+}
