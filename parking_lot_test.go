@@ -236,3 +236,42 @@ func TestParkingLot_FindRegistrationNumbersByColor(t *testing.T) {
 		})
 	}
 }
+
+func TestParkingLot_FindSlotByRegistrationNumber(t *testing.T) {
+	p = new(ParkingLot)
+	p.Init(6)
+	_, _ = p.Park("KA-01MJ-4190", "Red")
+	_, _ = p.Park("BRL-106", "Black")
+	_, _ = p.Park("DL-3CA-7766", "White")
+	_, _ = p.Park("BR-1d-5621 ", "Grey")
+	tests := []struct {
+		regnNumber string
+		wantSlot   int
+		wantErr    bool
+	}{
+		{"KA-01MJ-4190", 1, false},
+		{" Ka-01mj-4190 ", 1, false},
+		{"brl-106", 2, false},
+		{"DL3CA7766", -1, true},
+		{"", -1, true},
+	}
+	for _, tt := range tests {
+		t.Run("ParkingLotFindSlotByRegistrationNumberTest", func(t *testing.T) {
+			got, err := p.FindSlotByRegistrationNumber(tt.regnNumber)
+			if tt.wantErr {
+				if err == nil {
+					t.Errorf("ParkingLot.FindSlotByRegistrationNumber(): got err: %v but want: %v", NotFound, err)
+					return
+				}
+			} else {
+				if err != nil {
+					t.Errorf("ParkingLot.FindSlotByRegistrationNumber() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				if got != tt.wantSlot {
+					t.Errorf("ParkingLot.FindSlotByRegistrationNumber() got slot = %v, want %v", got, tt.wantSlot)
+				}
+			}
+		})
+	}
+}
