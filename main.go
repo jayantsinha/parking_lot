@@ -9,7 +9,7 @@ func main() {
 
 	flag.Parse()
 
-	funcMapper := map[string]func([]string){
+	funcMapper := map[string]func([]string) bool{
 		CmdCreateParkingLot:         CreateParkingLot,
 		CmdPark:                     ParkVehicle,
 		CmdLeave:                    LeaveSlot,
@@ -18,38 +18,25 @@ func main() {
 		CmdSlotNumForRegNum:         GetSlotNumByRegNum,
 		CmdSlotNumsForCarsWithColor: GetSlotsByColor,
 		CmdExit:                     EndSession,
+		CmdVersion:                  ShowVersion,
 	}
+	singleCmds := map[string]bool{CmdStatus: true, CmdExit: true, CmdVersion: true}
 
 	if len(flag.Args()) < 1 {
 		fmt.Println("Invalid command")
 	}
 
-	if len(flag.Args()) == 1 {
+	_, isSingleCmd := singleCmds[flag.Args()[0]]
+	if len(flag.Args()) == 1  &&  !isSingleCmd {
 		ExecFile(flag.Args()[0])
 	}
 
 	if len(flag.Args()) > 0 {
+		_, isValidCmd := funcMapper[flag.Args()[0]]
+		if !isValidCmd {
+			fmt.Println("Unknown command")
+			return
+		}
 		CallRespFunc(flag.Args(), funcMapper[flag.Args()[0]])
 	}
 }
-
-//switch flag.Args()[0] {
-//case CmdCreateParkingLot:
-//	break;
-//case CmdPark:
-//	break;
-//case CmdLeave:
-//	break;
-//case CmdStatus:
-//	break;
-//case CmdRegNumsForCarsWithColor:
-//	break;
-//case CmdSlotNumForRegNum:
-//	break;
-//case CmdSlotNumsForCarsWithColor:
-//	break;
-//case CmdExit:
-//	break;
-//default:
-//	fmt.Println("Invalid command!")
-//}
