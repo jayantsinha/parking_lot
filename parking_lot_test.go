@@ -1,6 +1,7 @@
 package main
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -149,5 +150,46 @@ func TestParkingLot_Status(t *testing.T) {
 	got = len(p.Status())
 	if got != 2 {
 		t.Errorf("ParkingLot.Status(): got length of Status() = %d; expected %d", got, 2)
+	}
+}
+
+func TestParkingLot_FindSlotNumbersByColor(t *testing.T) {
+	p = new(ParkingLot)
+	p.Init(6)
+	_, _ = p.Park("1111", "Red")
+	_, _ = p.Park("2222", "Purple")
+	_, _ = p.Park("3333", "White")
+	_, _ = p.Park("4444", "White")
+	_, _ = p.Park("5555", "Blue")
+	_, _ = p.Park("6666", "White")
+	tests := []struct {
+		color   string
+		want    []int
+		wantErr bool
+	}{
+		{"Red", []int{1}, false},
+		{"Purple", []int{2}, false},
+		{"White", []int{3, 4, 6}, false},
+		{"Blue", []int{5}, false},
+		{"Yellow", []int{}, true},
+	}
+	for idx, tt := range tests {
+		t.Run("ParkingLotSlotNumberByColorTest", func(t *testing.T) {
+			got, err := p.FindSlotNumbersByColor(tt.color)
+			if idx >= 4 {
+				if err == nil {
+					t.Errorf("ParkingLot.FindSlotNumbersByColor() got error = %v, but wanted error = %v", err, NotFound)
+					return
+				}
+			} else {
+				if (err != nil) != tt.wantErr {
+					t.Errorf("ParkingLot.FindSlotNumbersByColor() got error = %v, but wanted error = %v", err, tt.wantErr)
+					return
+				}
+				if !reflect.DeepEqual(got, tt.want) {
+					t.Errorf("ParkingLot.FindSlotNumbersByColor() = %v, want %v", got, tt.want)
+				}
+			}
+		})
 	}
 }
