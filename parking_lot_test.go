@@ -50,6 +50,7 @@ func TestParkingLot_Park(t *testing.T) {
 		{Vehicle{RegnNumber: "ABCD", Color: "White#$^"}, -1, true},
 		{Vehicle{RegnNumber: "BRL-106", Color: "White"}, -1, true},
 		{Vehicle{RegnNumber: "BRL-106", Color: "Black"}, -1, true},
+		{Vehicle{RegnNumber: "BR", Color: "Black"}, -1, true},
 	}
 
 	// Test parking without init
@@ -70,7 +71,7 @@ func TestParkingLot_Park(t *testing.T) {
 	for _, tt := range tests {
 		t.Run("VehicleParkingTest", func(t *testing.T) {
 			got, err := p.Park(tt.RegnNumber, tt.Color)
-			if tt.wantErr && (tt.RegnNumber == "" || tt.Color == "") {
+			if tt.wantErr {
 				if err == nil {
 					t.Errorf("ParkingLot.Park() got error: %v, want %v", err, InvalidInput)
 					return
