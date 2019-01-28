@@ -1,5 +1,9 @@
 package main
 
+import (
+	"strings"
+)
+
 type Vehicle struct {
 	RegnNumber string
 	Color      string
@@ -48,8 +52,12 @@ func (p *ParkingLot) Park(regnNumber, color string) (int, error) {
 	}
 
 	emptySlots.Remove(slotToFill)
-	p.Slots[slotToFill] = &Slot{Vhcl: &Vehicle{RegnNumber:regnNumber, Color:color}, Num: slotToFill}
-	return slotToFill+1, nil
+	p.Slots[slotToFill] = &Slot{Vhcl: &Vehicle{
+		RegnNumber: strings.TrimSpace(regnNumber),
+		Color:      strings.TrimSpace(color)},
+		Num: slotToFill,
+	}
+	return slotToFill + 1, nil
 }
 
 func (p *ParkingLot) Leave(slotNum int) (int, error) {
@@ -73,10 +81,22 @@ func (p *ParkingLot) Status() []*Slot {
 	return p.Slots
 }
 
-//func (p *ParkingLot) FindSlotNumbersByColor(color string) ([]int, error) {
-//
-//}
-//
+func (p *ParkingLot) FindSlotNumbersByColor(color string) ([]int, error) {
+	slots := make([]int, 0)
+	correctedColor := strings.TrimSpace(strings.ToLower(color))
+	for _, v := range p.Slots {
+		if strings.ToLower(v.Vhcl.Color) == correctedColor {
+			slots = append(slots, v.Num+1)
+		}
+	}
+
+	if len(slots) == 0 {
+		return []int{}, NotFound
+	}
+
+	return slots, nil
+}
+
 //func (p *ParkingLot) FindRegistrationNumbersByColor(color string) ([]string, error) {
 //
 //}
