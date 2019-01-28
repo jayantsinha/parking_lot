@@ -29,22 +29,49 @@ func init() {
 }
 
 func main() {
-	if len(flag.Args()) < 1 {
-		fmt.Println("Invalid command")
-	}
-
-	_, isSingleCmd := singleCmds[flag.Args()[0]]
-	if len(flag.Args()) == 1  &&  !isSingleCmd {
-		execFile(flag.Args()[0])
-	}
-
-	if len(flag.Args()) > 0 {
-		_, isValidCmd := funcMapper[flag.Args()[0]]
-		if !isValidCmd {
-			fmt.Println("Unknown command")
-			return
+	if len(flag.Args()) == 1 {
+		_, isSingleCmd := singleCmds[flag.Args()[0]]
+		if !isSingleCmd {
+			execFile(flag.Args()[0])
+			os.Exit(1)
 		}
-		CallRespFunc(flag.Args(), funcMapper[flag.Args()[0]])
+	} else {
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Println("Welcome to Parking Lot Manager")
+		line, _ := reader.ReadString('\n')
+		line = strings.TrimSpace(line)
+		cmd := separateFlags(line)
+		command := cmd[0]
+		if cmd[0] != CmdCreateParkingLot {
+			if cmd[0] == CmdExit {
+				EndSession(nil)
+			}
+			fmt.Println("Please create a parking lot first using `create_parking_lot <numSlots>`")
+		}
+		if len(cmd) != 2 {
+			fmt.Println("Invalid syntax")
+		}
+		ret := CreateParkingLot(cmd)
+		if !ret {
+			fmt.Println("Invalid input; unable to create parking lot.")
+		}
+		for command != CmdExit {
+			line, _ = reader.ReadString('\n')
+			line = strings.TrimSpace(line)
+			cmd = separateFlags(line)
+			if len(cmd) == 0 {
+				fmt.Println("Invalid command")
+				return
+			}
+			if len(cmd) > 0 {
+				_, isValidCmd := funcMapper[cmd[0]]
+				if !isValidCmd {
+					fmt.Println("Unknown command")
+					return
+				}
+				CallRespFunc(cmd, funcMapper[cmd[0]])
+			}
+		}
 	}
 }
 
@@ -78,7 +105,7 @@ func processArgs(args []string) {
 	}
 
 	_, isSingleCmd := singleCmds[args[0]]
-	if len(args) == 1  &&  !isSingleCmd {
+	if len(args) == 1 && !isSingleCmd {
 		execFile(args[0])
 	}
 
