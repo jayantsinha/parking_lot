@@ -170,13 +170,14 @@ func TestParkingLot_FindSlotNumbersByColor(t *testing.T) {
 		{"Red", []int{1}, false},
 		{"Purple", []int{2}, false},
 		{"White", []int{3, 4, 6}, false},
-		{"Blue", []int{5}, false},
+		{"Blue ", []int{5}, false},
+		{"BLUE", []int{5}, false},
 		{"Yellow", []int{}, true},
 	}
 	for idx, tt := range tests {
 		t.Run("ParkingLotSlotNumberByColorTest", func(t *testing.T) {
 			got, err := p.FindSlotNumbersByColor(tt.color)
-			if idx >= 4 {
+			if idx >= 5 {
 				if err == nil {
 					t.Errorf("ParkingLot.FindSlotNumbersByColor() got error = %v, but wanted error = %v", err, NotFound)
 					return
