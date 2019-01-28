@@ -123,7 +123,7 @@ func TestParkingLot_Leave(t *testing.T) {
 		{3, -1},
 		{-3, -1},
 	}
-	p = new(ParkingLot)
+	p := new(ParkingLot)
 	p.Init(2)
 	_, _ = p.Park("2122", "Red")
 	_, _ = p.Park("1111", "Purple")
@@ -154,7 +154,7 @@ func TestParkingLot_Leave(t *testing.T) {
 }
 
 func TestParkingLot_Status(t *testing.T) {
-	p = new(ParkingLot)
+	p := new(ParkingLot)
 	// Check on empty parking lot
 	got := len(p.Status())
 	if got != 0 {
@@ -170,7 +170,7 @@ func TestParkingLot_Status(t *testing.T) {
 }
 
 func TestParkingLot_FindSlotNumbersByColor(t *testing.T) {
-	p = new(ParkingLot)
+	p := new(ParkingLot)
 	p.Init(6)
 	_, _ = p.Park("1111", "Red")
 	_, _ = p.Park("2222", "Purple")
@@ -212,7 +212,7 @@ func TestParkingLot_FindSlotNumbersByColor(t *testing.T) {
 }
 
 func TestParkingLot_FindRegistrationNumbersByColor(t *testing.T) {
-	p = new(ParkingLot)
+	p := new(ParkingLot)
 	p.Init(6)
 	_, _ = p.Park("1111", "Red")
 	_, _ = p.Park("2222", "Purple")
@@ -254,7 +254,7 @@ func TestParkingLot_FindRegistrationNumbersByColor(t *testing.T) {
 }
 
 func TestParkingLot_FindSlotByRegistrationNumber(t *testing.T) {
-	p = new(ParkingLot)
+	p := new(ParkingLot)
 	p.Init(6)
 	_, _ = p.Park("KA-01MJ-4190", "Red")
 	_, _ = p.Park("BRL-106", "Black")
