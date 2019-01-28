@@ -2,6 +2,7 @@ package main
 
 import "math"
 
+// EmptySlots is a set to hold all the slot numbers which are vacant
 type EmptySlots struct {
 	set map[int]bool
 }
@@ -29,6 +30,7 @@ func (set *EmptySlots) Size() int {
 	return len(set.set)
 }
 
+// GetMin returns the minimum slot from the EmptySlots
 func (set *EmptySlots) GetMin() int {
 	if len(set.set) == 0 {
 		return -1

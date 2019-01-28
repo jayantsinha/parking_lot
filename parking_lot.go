@@ -14,6 +14,7 @@ type Slot struct {
 	Vhcl *Vehicle
 }
 
+// ParkingLot stores the vehicle and slot info
 type ParkingLot struct {
 	Slots  []*Slot
 	IsFull bool
@@ -21,6 +22,7 @@ type ParkingLot struct {
 
 var emptySlots *EmptySlots
 
+// Init creates a parking lot with given number of slots
 func (p *ParkingLot) Init(numSlots int) (int, error) {
 	emptySlots = NewEmptySlots()
 	if numSlots < 1 {
@@ -39,6 +41,7 @@ func (p *ParkingLot) Init(numSlots int) (int, error) {
 	return len(p.Slots), nil
 }
 
+// Park parks a vehicle to the next available slot with the lowest serial number
 func (p *ParkingLot) Park(regnNumber, color string) (int, error) {
 	// Check if parking lot is initialized
 	if p.Slots == nil {
@@ -75,6 +78,7 @@ func (p *ParkingLot) Park(regnNumber, color string) (int, error) {
 	return slotToFill + 1, nil
 }
 
+// Leave removes the vehicle from the specified slot number
 func (p *ParkingLot) Leave(slotNum int) (int, error) {
 	// Check if request is for an empty slot
 	if emptySlots.Contains(slotNum - 1) {
@@ -92,10 +96,12 @@ func (p *ParkingLot) Leave(slotNum int) (int, error) {
 	return slotNum, nil
 }
 
+// Status returns all the vehicles parked in the parking lot with their respective slt number
 func (p *ParkingLot) Status() []*Slot {
 	return p.Slots
 }
 
+// FindSlotNumbersByColor returns all the slot numbers which have a vehicle with the given color
 func (p *ParkingLot) FindSlotNumbersByColor(color string) ([]int, error) {
 	// For empty parking lot
 	if p.Slots == nil {
@@ -117,6 +123,7 @@ func (p *ParkingLot) FindSlotNumbersByColor(color string) ([]int, error) {
 	return slots, nil
 }
 
+// FindRegistrationNumbersByColor returns all registration numbers of the vehicles with the given color
 func (p *ParkingLot) FindRegistrationNumbersByColor(color string) ([]string, error) {
 	// For empty parking lot
 	if p.Slots == nil {
@@ -138,6 +145,7 @@ func (p *ParkingLot) FindRegistrationNumbersByColor(color string) ([]string, err
 	return rnums, nil
 }
 
+// FindSlotByRegistrationNumber returns the slot number where the vehicle with the given registration number is parked
 func (p *ParkingLot) FindSlotByRegistrationNumber(regnNumber string) (int, error) {
 	// For empty parking lot
 	if p.Slots == nil {

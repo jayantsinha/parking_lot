@@ -8,7 +8,9 @@ import (
 	"strings"
 )
 
+// singleCmds holds all commands which does not have any argument
 var singleCmds map[string]bool
+// funcMapper is a map of command to its handler
 var funcMapper map[string]func([]string) bool
 
 func init() {
@@ -93,12 +95,14 @@ func execFile(filepath string) {
 	}
 }
 
+// separateFlags separates the commands and arguments from the given line
 func separateFlags(line string) (args []string) {
 	line = strings.TrimSpace(line)
 	args = strings.Split(line, " ")
 	return
 }
 
+// processArgs processes the commands with the arguments
 func processArgs(args []string) {
 	if len(args) < 1 {
 		fmt.Println("Invalid command")
