@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -17,22 +15,6 @@ var (
 )
 
 var isParkingLotCreated bool
-
-func ExecFile(filepath string) {
-	file, err := os.Open(filepath)
-
-	if err != nil {
-		_ = fmt.Errorf("Error encountered while reading file: Err: %v", err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		fmt.Println(line)
-	}
-}
 
 func CallRespFunc(args []string, f func(args []string) bool) bool {
 	return f(args)
@@ -121,9 +103,11 @@ func GetStatus(args []string) (ret bool) {
 
 	fmt.Print(heading[0], "\t", heading[1], "\t", heading[2], "\n")
 	for _, s := range slots {
-		fmt.Print(s.Num+1, "\t")
-		fmt.Print(s.Vhcl.RegnNumber, "\t")
-		fmt.Println(s.Vhcl.Color)
+		if s.Vhcl != nil {
+			fmt.Print(s.Num+1, "\t")
+			fmt.Print(s.Vhcl.RegnNumber, "\t")
+			fmt.Println(s.Vhcl.Color)
+		}
 	}
 	ret = true
 	return
@@ -139,7 +123,7 @@ func GetRegNumsByColor(args []string) (ret bool) {
 
 	rnums, err := p.FindRegistrationNumbersByColor(args[1])
 	if err != nil {
-		fmt.Println(InvalidValuePassed)
+		fmt.Println(err)
 		return
 	}
 	fmt.Println(strings.Join(rnums, ", "))
@@ -157,7 +141,7 @@ func GetSlotNumByRegNum(args []string) (ret bool) {
 
 	slot, err := p.FindSlotByRegistrationNumber(args[1])
 	if err != nil {
-		fmt.Println(InvalidValuePassed)
+		fmt.Println(err)
 		return
 	}
 	fmt.Println(slot)
@@ -175,7 +159,7 @@ func GetSlotsByColor(args []string) (ret bool) {
 
 	slots, err := p.FindSlotNumbersByColor(args[1])
 	if err != nil {
-		fmt.Println(InvalidValuePassed)
+		fmt.Println(err)
 		return
 	}
 	fmt.Println(strings.Trim(strings.Replace(fmt.Sprint(slots), " ", ", ", -1), "[]"))
