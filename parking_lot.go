@@ -48,7 +48,7 @@ func (p *ParkingLot) Park(regnNumber, color string) (int, error) {
 	}
 
 	emptySlots.Remove(slotToFill)
-	p.Slots = append(p.Slots, &Slot{Vhcl: &Vehicle{RegnNumber:regnNumber, Color:color}, Num: slotToFill})
+	p.Slots[slotToFill] = &Slot{Vhcl: &Vehicle{RegnNumber:regnNumber, Color:color}, Num: slotToFill}
 	return slotToFill+1, nil
 }
 
