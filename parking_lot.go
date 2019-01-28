@@ -37,12 +37,24 @@ func (p *ParkingLot) Init(numSlots int) int {
 }
 
 func (p *ParkingLot) Park(regnNumber, color string) (int, error) {
+	// Check if parking lot is initialized
 	if p.Slots == nil {
 		return -1, UnableToPark
 	}
 
+	// Check if parking lot is full
 	if p.IsFull {
 		return -1, ParkingLotFull
+	}
+
+	// Check for valid registration number and color string
+	if !isValidRegistrationNumber(regnNumber) || !isValidColor(color) {
+		return -1, InvalidInput
+	}
+
+	// Check for duplicate registration number
+	if p.hasVehicle(regnNumber) {
+		return -1, InvalidInput
 	}
 
 	slotToFill := emptySlots.GetMin()
@@ -143,4 +155,45 @@ func (p *ParkingLot) FindSlotByRegistrationNumber(regnNumber string) (int, error
 	}
 
 	return slot, nil
+}
+
+// isValidRegistrationNumber validates the registration number
+// Registration number should have a minimum of 3 characters and any of these: (A-Z, a-z, 0-9 or -)
+func isValidRegistrationNumber(regnNum string) bool {
+	if len(regnNum) < 3 {
+		return false
+	}
+	fn := func(r rune) bool {
+		return !((r >= 'A' && r <= 'z') || (r >= '0' && r <= '9') || r == '\u002D')
+	}
+	if strings.IndexFunc(regnNum, fn) != -1 {
+		return false
+	}
+	return true
+}
+
+// isValidColor checks color string for valid characters and min len of 3
+// no special characters or numbers are allowed including space
+func isValidColor(color string) bool {
+	if len(color) < 3 {
+		return false
+	}
+	fn := func(r rune) bool {
+		return !(r > 'A' && r < 'z')
+	}
+	if strings.IndexFunc(color, fn) != -1 {
+		return false
+	}
+	return true
+}
+
+// hasVehicle checks if the vehicle with registration number is already parked or not
+func (p *ParkingLot) hasVehicle(regnNum string) bool {
+	regnNumForSearch := strings.TrimSpace(strings.ToLower(regnNum))
+	for _, v := range p.Slots {
+		if v.Vhcl != nil && strings.TrimSpace(strings.ToLower(v.Vhcl.RegnNumber)) == regnNumForSearch {
+			return true
+		}
+	}
+	return false
 }
