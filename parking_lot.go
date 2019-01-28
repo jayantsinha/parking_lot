@@ -82,6 +82,11 @@ func (p *ParkingLot) Status() []*Slot {
 }
 
 func (p *ParkingLot) FindSlotNumbersByColor(color string) ([]int, error) {
+	// For empty parking lot
+	if p.Slots == nil {
+		return []int{}, ParkingLotEmpty
+	}
+
 	slots := make([]int, 0)
 	correctedColor := strings.TrimSpace(strings.ToLower(color))
 	for _, v := range p.Slots {
@@ -98,6 +103,11 @@ func (p *ParkingLot) FindSlotNumbersByColor(color string) ([]int, error) {
 }
 
 func (p *ParkingLot) FindRegistrationNumbersByColor(color string) ([]string, error) {
+	// For empty parking lot
+	if p.Slots == nil {
+		return []string{}, ParkingLotEmpty
+	}
+
 	rnums := make([]string, 0)
 	correctedColor := strings.TrimSpace(strings.ToLower(color))
 	for _, v := range p.Slots {
@@ -113,6 +123,24 @@ func (p *ParkingLot) FindRegistrationNumbersByColor(color string) ([]string, err
 	return rnums, nil
 }
 
-//func (p *ParkingLot) FindSlotByRegistrationNumber(regnNumber string) (int, error) {
-//
-//}
+func (p *ParkingLot) FindSlotByRegistrationNumber(regnNumber string) (int, error) {
+	// For empty parking lot
+	if p.Slots == nil {
+		return -1, ParkingLotEmpty
+	}
+	slot := 0
+	correctedRegn := strings.TrimSpace(strings.ToLower(regnNumber))
+	for _, v := range p.Slots {
+		if v.Vhcl != nil && strings.ToLower(v.Vhcl.RegnNumber) == correctedRegn {
+			slot = v.Num + 1
+			break
+		}
+	}
+
+	// If registration number not found
+	if slot == 0 {
+		return -1, NotFound
+	}
+
+	return slot, nil
+}
