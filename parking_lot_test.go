@@ -102,7 +102,9 @@ func TestParkingLot_Leave(t *testing.T) {
 	} {
 		{1,1},
 		{2,2},
+		{2,-1},
 		{3,-1},
+		{-3,-1},
 	}
 	p = new(ParkingLot)
 	p.Init(2)
@@ -111,16 +113,24 @@ func TestParkingLot_Leave(t *testing.T) {
 	for idx, tt := range slotTests {
 		t.Run("ParkingLot.Leave()", func(t *testing.T) {
 			got, err := p.Leave(tt.slotNum)
-			if idx >= 2 && err == nil{
-				t.Errorf("ParkingLot.Leave() expected error = %v but got %v", UnableToVacate, err)
-				return
-			}
-			if err != nil {
-				t.Errorf("ParkingLot.Leave() error = %v", err)
-				return
-			}
-			if got != tt.vacatedSlot {
-				t.Errorf("ParkingLot.Leave() = %v, want %v", got, tt.vacatedSlot)
+			if idx == 2 {
+				if err == nil {
+					t.Errorf("ParkingLot.Leave() expected error = %v but got %v", UnableToVacateEmptySlot, err)
+					return
+				}
+			} else if idx >= 3 {
+				if err == nil {
+					t.Errorf("ParkingLot.Leave() expected error = %v but got %v , got ret %d", UnableToVacateOnNonExistentSlot, err, got)
+					return
+				}
+			} else {
+				if err != nil {
+					t.Errorf("ParkingLot.Leave() error = %v for %d", err, tt.slotNum)
+					return
+				}
+				if got != tt.vacatedSlot {
+					t.Errorf("ParkingLot.Leave() got %v, want %v", got, tt.vacatedSlot)
+				}
 			}
 		})
 	}
