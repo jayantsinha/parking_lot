@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+BINARY_NAME="parking_lot"
+go test ./...
+rm -f $BINARY_NAME
+go build -o $BINARY_NAME -v
