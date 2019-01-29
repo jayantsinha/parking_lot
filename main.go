@@ -63,13 +63,13 @@ func main() {
 			cmd = separateFlags(line)
 			if len(cmd) == 0 {
 				fmt.Println("Invalid command")
-				return
+				continue
 			}
 			if len(cmd) > 0 {
 				_, isValidCmd := funcMapper[cmd[0]]
 				if !isValidCmd {
 					fmt.Println("Unknown command")
-					return
+					continue
 				}
 				CallRespFunc(cmd, funcMapper[cmd[0]])
 			}
