@@ -114,15 +114,15 @@ func GetStatus(args []string) (ret bool) {
 	heading := []string{"Slot No.", "Registration No", "Color"}
 	slots := p.Status()
 	if len(slots) == 0 {
-		fmt.Print(heading[0], "\t", heading[1], "\t", heading[2], "\n")
+		fmt.Print(heading[0], "\t", heading[1], "\t\t", heading[2], "\n")
 		return
 	}
 
-	fmt.Print(heading[0], "\t", heading[1], "\t", heading[2], "\n")
+	fmt.Print(heading[0], "\t", heading[1], "\t\t", heading[2], "\n")
 	for _, s := range slots {
 		if s.Vhcl != nil {
-			fmt.Print(s.Num+1, "\t")
-			fmt.Print(s.Vhcl.RegnNumber, "\t")
+			fmt.Print(s.Num+1, "\t\t")
+			fmt.Print(s.Vhcl.RegnNumber, "\t\t")
 			fmt.Println(s.Vhcl.Color)
 		}
 	}
