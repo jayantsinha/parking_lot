@@ -1,5 +1,5 @@
 ## Parking Lot Management CLI using Go
-###Problem Statement
+### Problem Statement
 
 I own a parking lot that can hold up to 'n' cars at any given point in time. Each slot is
 given a number starting at 1 increasing with increasing distance from the entry point
@@ -65,7 +65,7 @@ slot_numbers_for_cars_with_colour White
 slot_number_for_registration_number KA-01-HH-3141
 slot_number_for_registration_number MH-04-AY-1111
 ```
-####Output (to STDOUT):
+#### Output (to STDOUT):
 ```
 Created a parking lot with 6 slots
 Allocated slot number: 1
